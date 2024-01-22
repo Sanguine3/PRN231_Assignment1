@@ -1,4 +1,5 @@
 using EstoreMVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EstoreMVC
 {
@@ -7,6 +8,15 @@ namespace EstoreMVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add configuration settings
+            builder.Configuration.AddJsonFile("appsettings.json");
+
+            var connectionString = builder.Configuration.GetConnectionString("DbConnection");
+
+            // Add services
+            builder.Services.AddDbContext<EStoreContext>(options =>
+                options.UseSqlServer(connectionString));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

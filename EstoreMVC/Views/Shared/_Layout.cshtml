@@ -29,9 +29,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                         @if (role == 1)
                         {
                             <li class="nav-item">
@@ -47,6 +44,19 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
                             </li>
                         }
+                        @if (role == 1)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="OrderDetails" asp-action="Report">Report</a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav">
                         @if (email == "")
                         {
                             <li class="nav-item">
@@ -56,11 +66,13 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Login">Logout (@email)</a>
+                                <form class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-link text-dark">Logout (@email)</button>
+                                </form>
                             </li>
-                            
                         }
                     </ul>
+
                 </div>
             </div>
         </nav>

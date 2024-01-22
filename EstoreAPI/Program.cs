@@ -1,5 +1,6 @@
 using EstoreAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace EstoreAPI
 {
@@ -11,13 +12,15 @@ namespace EstoreAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers();		
 
             builder.Services.AddDbContext<EStoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
             });
 
+            builder.Services.AddScoped<EStoreContext>();  
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
