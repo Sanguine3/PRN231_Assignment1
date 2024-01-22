@@ -1,4 +1,4 @@
-# Project Title
+# Assignment 1
 
 This is one of the project ever made!
 
@@ -17,7 +17,7 @@ This project does things.
 To get started, simply follow these steps:
 
 1. Clone the repository: `git clone blah blah blah`
-2. Run the setup script: `./setup.sh`
+2. Run things
 3. Very cool!
 
 ## Usage
