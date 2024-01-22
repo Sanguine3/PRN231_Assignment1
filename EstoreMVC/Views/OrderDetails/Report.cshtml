@@ -5,28 +5,42 @@
     ViewData["Title"] = "Report";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">Order Detail Report</h2>
+<h2 class="mb-4">Order Detail Report</h2>
 
-    <form asp-controller="OrderDetails" asp-action="Report" method="get" class="mb-4">
-        <div class="row">
-            <div class="col-md-4">
-                <label for="fromDate" class="form-label">From Date:</label>
-                <input type="date" id="fromDate" name="fromDate" class="form-control" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")" />
+<div class="container">
+    <form asp-controller="OrderDetails" asp-action="Report" method="get" class="mb-3">
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label for="fromDate" class="col-form-label">From Date:</label>
             </div>
-            <div class="col-md-4">
-                <label for="toDate" class="form-label">To Date:</label>
-                <input type="date" id="toDate" name="toDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <div class="col-auto">
+                <input type="date" id="fromDate" name="fromDate" class="form-control" value="@ViewBag.FromDate" />
             </div>
-            <div class="col-md-2">
+            <div class="col-auto">
+                <label for="toDate" class="col-form-label">To Date:</label>
+            </div>
+            <div class="col-auto">
+                <input type="date" id="toDate" name="toDate" class="form-control" value="@ViewBag.ToDate" />
+            </div>
+            <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-secondary" onclick="clearDates()">All</button>
             </div>
         </div>
     </form>
+</div>
 
-    <p class="mb-2">Order Count: @Model.Count()</p>
-    <p class="mb-4">Total Order Price: @ViewBag.TotalOrderPrice</p>
+<p class="mb-4">
+    <span class="fw-bold">Order Count:</span> @Model.Count()
+</p>
 
+<p class="mb-4">
+    <span class="fw-bold">Total Order Price:</span> $@ViewBag.TotalOrderPrice.ToString("0.00")
+</p>
+
+<div class="container mt-4">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -37,7 +51,6 @@
                 <th>Quantity</th>
                 <th>Discount</th>
                 <th>Product Name</th>
-                <!-- Add more columns as needed -->
             </tr>
         </thead>
         <tbody>
@@ -51,9 +64,17 @@
                     <td>@orderDetail.Quantity</td>
                     <td>@orderDetail.Discount</td>
                     <td>@orderDetail.Product.ProductName</td>
-                    <!-- Add more cells as needed -->
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section scripts {
+    <script>
+        function clearDates() {
+            document.getElementById("fromDate").value = "";
+            document.getElementById("toDate").value = "";
+        }
+    </script>
+}
