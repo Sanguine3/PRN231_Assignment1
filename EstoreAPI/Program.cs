@@ -14,10 +14,10 @@ namespace EstoreAPI
 
             builder.Services.AddControllers();		
 
-            builder.Services.AddDbContext<EStoreContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
-            });
+            //builder.Services.AddDbContext<EStoreContext>(options =>
+            //{
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
+            //});
 
             builder.Services.AddScoped<EStoreContext>();  
             

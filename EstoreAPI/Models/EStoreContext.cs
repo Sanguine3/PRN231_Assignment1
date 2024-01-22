@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using EstoreMVC;
 
 namespace EstoreAPI.Models
 {
@@ -26,11 +27,15 @@ namespace EstoreAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+                // Lấy đường dẫn của file appsettings.json từ thư mục gốc của solution
+                string appSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), "../EstoreMVC/appsettings.json");
+
                 var conf = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
+                    .SetBasePath(Directory.GetCurrentDirectory())  // Đặt thư mục làm việc hiện tại cho ConfigurationBuilder
+                    .AddJsonFile(appSettingsPath)
                     .Build();
 
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code.
                 optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
             }
         }

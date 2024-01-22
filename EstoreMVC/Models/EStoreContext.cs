@@ -26,12 +26,16 @@ namespace EstoreMVC.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //var conf = new ConfigurationBuilder()
-                //    .AddJsonFile("appsettings.json")
-                //    .Build();
+                // Lấy đường dẫn của file appsettings.json từ thư mục gốc của solution
+                string appSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), "../EstoreMVC/appsettings.json");
 
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=DESKTOP-3LM8VOV\\PHU;database=EStore;Integrated security=true;TrustServerCertificate=true");
+                var conf = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())  // Đặt thư mục làm việc hiện tại cho ConfigurationBuilder
+                    .AddJsonFile(appSettingsPath)
+                    .Build();
+
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code.
+                optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
             }
         }
 
