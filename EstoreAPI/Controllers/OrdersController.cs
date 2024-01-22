@@ -128,14 +128,32 @@ namespace EstoreAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
-          if (_context.Orders == null)
-          {
-              return Problem("Entity set 'EStoreContext.Orders'  is null.");
-          }
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (_context.Orders == null)
+                {
+                    return Problem("Entity set 'EStoreContext.Orders'  is null.");
+                }
+                Order order1 = new Order
+                {
+                    Freight = order.Freight,
+                    MemberId = order.MemberId,
+                    ShippedDate = order.ShippedDate,
+                    OrderDate = order.OrderDate,
+                    RequiredDate = order.RequiredDate,
+                    //Member = order.Member,
+                };
+                _context.Orders.Add(order1);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
+                return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+          
         }
 
         // DELETE: api/Orders/5

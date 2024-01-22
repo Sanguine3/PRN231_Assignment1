@@ -1,6 +1,7 @@
 ﻿using EstoreMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 
@@ -54,12 +55,22 @@ namespace EstoreMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Order category)
+        public async Task<IActionResult> Create(Order order)
         {
             try
             {
-                var categoryJson = JsonSerializer.Serialize(category);
-                var content = new StringContent(categoryJson, Encoding.UTF8, "application/json");
+                HttpResponseMessage responseMember = await client.GetAsync($"http://localhost:5105/api/Members/{order.MemberId}");
+                var strData = await responseMember.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                var member = JsonSerializer.Deserialize<Member>(strData, options);
+                Order newOrder = order;
+                newOrder.Member = member;
+
+                var orderJson = JsonSerializer.Serialize(newOrder);
+                var content = new StringContent(orderJson, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.PostAsync(OrderURL, content);
 
@@ -71,7 +82,7 @@ namespace EstoreMVC.Controllers
             {
                 // Handle exceptions, log the error, or return an error view
                 ModelState.AddModelError("", "An error occurred while creating the category.");
-                return View(category);
+                return View(order);
             }
         }
 
@@ -94,12 +105,22 @@ namespace EstoreMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryName")] Order category)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderId,MemberId,OrderDate,RequiredDate,ShippedDate,Freight")] Order order)
         {
             try
             {
-                var categoryData = JsonSerializer.Serialize<Order>(category);
-                var content = new StringContent(categoryData, Encoding.UTF8, "application/json");
+                HttpResponseMessage responseMember = await client.GetAsync($"http://localhost:5105/api/Members/{order.MemberId}");
+                var strData = await responseMember.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                var member = JsonSerializer.Deserialize<Member>(strData, options);
+                Order newOrder = order;
+                newOrder.Member = member;
+
+                var orderData = JsonSerializer.Serialize<Order>(newOrder);
+                var content = new StringContent(orderData, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PutAsync($"{OrderURL}/{id}", content);
                 response.EnsureSuccessStatusCode();
                 return RedirectToAction("Index");
@@ -107,7 +128,7 @@ namespace EstoreMVC.Controllers
             }
             catch (Exception)
             {
-                return View(category);
+                return View(order);
             }
         }
 
