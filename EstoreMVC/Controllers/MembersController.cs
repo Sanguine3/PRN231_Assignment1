@@ -31,12 +31,13 @@ namespace EstoreMVC.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-          
+
             try
             {
                 HttpResponseMessage response = await client.GetAsync(MemberUrl);
                 response.EnsureSuccessStatusCode();
-                var options = new JsonSerializerOptions {
+                var options = new JsonSerializerOptions
+                {
                     PropertyNameCaseInsensitive = true
                 };
                 string strData = await response.Content.ReadAsStringAsync();
@@ -49,7 +50,7 @@ namespace EstoreMVC.Controllers
             }
 
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Login()
         {
@@ -66,7 +67,7 @@ namespace EstoreMVC.Controllers
             email = conf.GetSection("Admin").GetSection("Email").Value.ToString();
             pass = conf.GetSection("Admin").GetSection("Password").Value.ToString();
 
-            if(email == Email && pass == Password)
+            if (email == Email && pass == Password)
             {
                 HttpContext.Session.SetInt32("Role", 1);
                 HttpContext.Session.SetString("Email", email);
@@ -97,7 +98,19 @@ namespace EstoreMVC.Controllers
             {
                 return View();
             }
-            
+
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear user-related session variables
+            HttpContext.Session.Remove("Role");
+            HttpContext.Session.Remove("Email");
+            HttpContext.Session.Remove("MemberId");
+
+            // Redirect to the home page or login page
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -241,7 +254,7 @@ namespace EstoreMVC.Controllers
 
         private bool MemberExists(int id)
         {
-          return (_context.Members?.Any(e => e.MemberId == id)).GetValueOrDefault();
+            return (_context.Members?.Any(e => e.MemberId == id)).GetValueOrDefault();
         }
     }
 }

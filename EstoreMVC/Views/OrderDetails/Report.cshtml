@@ -1,0 +1,59 @@
+﻿<!-- EstoreMVC/Views/OrderDetails/Report.cshtml -->
+@model IEnumerable<EstoreMVC.Models.OrderDetail>
+
+@{
+    ViewData["Title"] = "Report";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Order Detail Report</h2>
+
+    <form asp-controller="OrderDetails" asp-action="Report" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="fromDate" class="form-label">From Date:</label>
+                <input type="date" id="fromDate" name="fromDate" class="form-control" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="col-md-4">
+                <label for="toDate" class="form-label">To Date:</label>
+                <input type="date" id="toDate" name="toDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <p class="mb-2">Order Count: @Model.Count()</p>
+    <p class="mb-4">Total Order Price: @ViewBag.TotalOrderPrice</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Order Detail ID</th>
+                <th>Product ID</th>
+                <th>Order ID</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Discount</th>
+                <th>Product Name</th>
+                <!-- Add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var orderDetail in Model)
+            {
+                <tr>
+                    <td>@orderDetail.OrderDetailId</td>
+                    <td>@orderDetail.ProductId</td>
+                    <td>@orderDetail.OrderId</td>
+                    <td>@orderDetail.UnitPrice</td>
+                    <td>@orderDetail.Quantity</td>
+                    <td>@orderDetail.Discount</td>
+                    <td>@orderDetail.Product.ProductName</td>
+                    <!-- Add more cells as needed -->
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

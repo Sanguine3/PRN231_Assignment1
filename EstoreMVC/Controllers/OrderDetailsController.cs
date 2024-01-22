@@ -15,13 +15,19 @@ public class OrderDetailsController : Controller
         _context = context;
     }
 
-    // ... Other actions ...
-
     [HttpGet]
     public async Task<IActionResult> Report(DateTime? fromDate, DateTime? toDate)
     {
         fromDate ??= DateTime.Today.AddMonths(-1);
         toDate ??= DateTime.Today;
+
+        // Check user role for authorization
+        int userRole = HttpContext.Session.GetInt32("Role") ?? -1;
+        if (userRole != 1)
+        {
+            // User does not have permission to view the order details report
+            return Forbid();
+        }
 
         var orderDetails = await _context.OrderDetails
             .Include(od => od.Product)
@@ -31,6 +37,10 @@ public class OrderDetailsController : Controller
         ViewBag.OrderCount = orderDetails.Count();
         ViewBag.FromDate = fromDate.Value;
         ViewBag.ToDate = toDate.Value;
+
+        // Calculate total order price
+        decimal totalOrderPrice = orderDetails.Sum(od => od.Quantity * od.UnitPrice * (1 - od.Discount / 100m));
+        ViewBag.TotalOrderPrice = totalOrderPrice;
 
         return View(orderDetails);
     }

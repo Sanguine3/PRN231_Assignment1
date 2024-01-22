@@ -69,7 +69,9 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Login">Logout (@email)</a>
+                                <form class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-link text-dark">Logout (@email)</button>
+                                </form>
                             </li>
                         }
                     </ul>
