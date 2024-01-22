@@ -47,6 +47,19 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
                             </li>
                         }
+                        @if (role == 1)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="OrderDetails" asp-action="Report">Order Report</a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav">
                         @if (email == "")
                         {
                             <li class="nav-item">
@@ -58,9 +71,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Login">Logout (@email)</a>
                             </li>
-                            
                         }
                     </ul>
+
                 </div>
             </div>
         </nav>
