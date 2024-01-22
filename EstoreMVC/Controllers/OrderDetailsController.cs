@@ -16,11 +16,8 @@ public class OrderDetailsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Report(DateTime? fromDate, DateTime? toDate)
+    public async Task<IActionResult> Report(DateTime? fromDate = null, DateTime? toDate = null)
     {
-        fromDate ??= DateTime.Today.AddMonths(-1);
-        toDate ??= DateTime.Today;
-
         // Check user role for authorization
         int userRole = HttpContext.Session.GetInt32("Role") ?? -1;
         if (userRole != 1)
@@ -29,14 +26,22 @@ public class OrderDetailsController : Controller
             return Forbid();
         }
 
-        var orderDetails = await _context.OrderDetails
-            .Include(od => od.Product)
-            .Where(od => od.Order.OrderDate >= fromDate && od.Order.OrderDate <= toDate)
-            .ToListAsync();
+        IQueryable<OrderDetail> orderDetailsQuery = _context.OrderDetails
+            .Include(od => od.Product);
+
+        // Filter by date range if fromDate and toDate are provided
+        if (fromDate != null && toDate != null)
+        {
+            orderDetailsQuery = orderDetailsQuery
+                .Where(od => od.Order.OrderDate >= fromDate && od.Order.OrderDate <= toDate);
+        }
+
+        // Execute the query
+        var orderDetails = await orderDetailsQuery.ToListAsync();
 
         ViewBag.OrderCount = orderDetails.Count();
-        ViewBag.FromDate = fromDate.Value;
-        ViewBag.ToDate = toDate.Value;
+        ViewBag.FromDate = fromDate?.ToString("yyyy-MM-dd"); // Convert to string to set the input value
+        ViewBag.ToDate = toDate?.ToString("yyyy-MM-dd");     // Convert to string to set the input value
 
         // Calculate total order price
         decimal totalOrderPrice = orderDetails.Sum(od => od.Quantity * od.UnitPrice * (1 - od.Discount / 100m));
