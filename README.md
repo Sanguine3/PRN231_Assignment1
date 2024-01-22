@@ -8,21 +8,20 @@ This project does things.
 
 ## Features
 
-- **Feature 1:** [1](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- **Feature 2:** [2](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- **Feature 3:** [3](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- **Feature 1:** [First](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- **Feature 2:** [Second](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- **Feature 3:** [Third](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 ## Installation
 
 To get started, simply follow these steps:
 
-1. Clone the repository: `git clone https://www.youtube.com/watch?v=dQw4w9WgXcQ`
+1. Clone the repository: `git clone blah blah blah`
 2. Run the setup script: `./setup.sh`
-3. Enjoy the magic!
+3. Very cool!
 
 ## Usage
 
 Here's how you can use this project:
+[Demo video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
-```bash
-npm start
