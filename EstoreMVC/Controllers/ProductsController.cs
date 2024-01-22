@@ -26,11 +26,14 @@ namespace EstoreMVC.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? productName, string? productPrice)
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync(ProductUrl);
+                ViewData["productName"] = productName;
+                ViewData["productPrice"] = productPrice;
+                int price= !String.IsNullOrEmpty(productPrice)?int.Parse(productPrice):0;
+                HttpResponseMessage response = await client.GetAsync($"{ProductUrl}/search?name={productName}&price={price}");
                 response.EnsureSuccessStatusCode();
                 var options = new JsonSerializerOptions
                 {
@@ -183,7 +186,7 @@ namespace EstoreMVC.Controllers
                     return NotFound();
                 }
 
-                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", product.CategoryId);
+                //ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", product.CategoryId);
                 return View(product);
             }
             catch

@@ -19,7 +19,29 @@ namespace EstoreAPI.Controllers
         {
             _context = context;
         }
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Product>>> searchByNameAndPrice([FromQuery] string? name, [FromQuery] int price)
+        {
+            List<Product> products = new List<Product>();
+            if (!String.IsNullOrEmpty(name))
+            {
+                products = _context.Products.Where(p=>p.ProductName.Contains(name)).ToList();
+                if (price > 0)
+                {
+                    products = products.Where(p=>p.UnitPrice <= price).ToList();
+                }
+            }
+            else
+            {
+                products = _context.Products.ToList();
+                if(price > 0)
+                {
+                    products = products.Where(p => p.UnitPrice <= price).ToList();
+                }
+            }
+            return products;
 
+        }
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()

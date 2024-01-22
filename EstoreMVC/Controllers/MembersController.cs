@@ -102,18 +102,16 @@ namespace EstoreMVC.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Members == null)
-            {
-                return NotFound();
-            }
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"{MemberUrl}/{id}");
+            var strData = await httpResponseMessage.Content.ReadAsStringAsync();
 
-            var member = await _context.Members
-                .FirstOrDefaultAsync(m => m.MemberId == id);
-            if (member == null)
+            var options = new JsonSerializerOptions
             {
-                return NotFound();
-            }
+                PropertyNameCaseInsensitive = true
+            };
 
+            var member = JsonSerializer.Deserialize<Member>(strData, options);
+            httpResponseMessage.EnsureSuccessStatusCode();
             return View(member);
         }
 
@@ -206,6 +204,17 @@ namespace EstoreMVC.Controllers
                 // Xử lý lỗi khác
                 return View("Error");
             }
+        }
+
+        // GET: Categories/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            HttpResponseMessage response = await client.GetAsync($"{MemberUrl}/{id}");
+            var strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, };
+            var member = JsonSerializer.Deserialize<Member>(strData, options);
+            return View(member);
         }
 
         [HttpPost, ActionName("Delete")]

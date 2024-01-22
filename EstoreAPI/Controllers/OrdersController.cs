@@ -16,36 +16,11 @@ namespace EstoreAPI.Controllers
     public class OrdersController : Controller
     {
         private readonly EStoreContext _context;
-        //private readonly HttpClient client;
-        //private string OrderUrl = "http://localhost:5105/api/Orders/OrdersByMember";
-        //public OrdersController(EStoreContext context)
-        //{
-        //    _context = context;
-        //    client = new HttpClient();
-        //    var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-        //    client.DefaultRequestHeaders.Accept.Add(contentType);
-        //}
-
-        //public async Task<IActionResult> Index(int? id)
-        //{
-        //    try
-        //    {
-        //        HttpResponseMessage response = await client.GetAsync($"{OrderUrl}/{id}");
-        //        response.EnsureSuccessStatusCode();
-        //        var options = new JsonSerializerOptions
-        //        {
-        //            PropertyNameCaseInsensitive = true
-        //        };
-        //        string strData = await response.Content.ReadAsStringAsync();
-        //        List<OrderDTO> orders = JsonSerializer.Deserialize<List<OrderDTO>>(strData, options);
-        //        return View(orders);
-        //    }
-        //    catch
-        //    {
-        //        return NoContent();
-        //    }
-        //}
-
+        public OrdersController(EStoreContext context)
+        {
+            _context = context;
+        }
+        
         // GET: api/Orders
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()

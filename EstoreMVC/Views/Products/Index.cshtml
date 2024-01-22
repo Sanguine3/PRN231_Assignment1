@@ -4,6 +4,21 @@
     ViewData["Title"] = "Index";
 }
 
+<form asp-controller="Products" asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find Product: <input type="text" name="productName" value="@ViewData["productName"]" />
+        </p>
+    </div>
+    <div class="form-actions no-color">
+        <p>
+            Find Price <= (an Interval): Interval= <input type="text" name="productPrice" value="@ViewData["productPrice"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+        </p>
+    </div>
+
+</form>
+
 <h1>Index</h1>
 
 <p>
